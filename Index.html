@@ -1,0 +1,162 @@
+from IPython.display import display, HTML
+import random
+
+# Tạo pháo hoa ngẫu nhiên
+def gen_fireworks(n=60):
+    items = ""
+    colors = ["#ff6b6b","#ffd93d","#6bcb77","#4d96ff","#ff922b","#cc5de8","#f06595","#74c0fc"]
+    for _ in range(n):
+        left = random.randint(0, 100)
+        top = random.randint(0, 100)
+        color = random.choice(colors)
+        size = random.randint(4, 10)
+        delay = round(random.uniform(0, 3), 2)
+        duration = round(random.uniform(1.5, 3.5), 2)
+        items += f"""
+        <div class="spark" style="
+            left:{left}%;top:{top}%;
+            background:{color};
+            width:{size}px;height:{size}px;
+            animation-delay:{delay}s;
+            animation-duration:{duration}s;
+        "></div>"""
+    return items
+
+html_code = f"""
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@600&display=swap');
+
+  body {{
+    margin: 0;
+    background: #0d0d1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }}
+
+  .fireworks-container {{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }}
+
+  .spark {{
+    position: absolute;
+    border-radius: 50%;
+    animation: burst linear infinite;
+    opacity: 0;
+  }}
+
+  @keyframes burst {{
+    0%   {{ transform: scale(0) translate(0,0); opacity: 1; }}
+    60%  {{ opacity: 1; }}
+    100% {{ transform: scale(1) translate(var(--tx, 60px), var(--ty, -80px)); opacity: 0; }}
+  }}
+
+  .card {{
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 50px 60px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 60px rgba(120,60,255,0.4), 0 0 120px rgba(255,100,150,0.15);
+    animation: cardPop 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }}
+
+  @keyframes cardPop {{
+    from {{ transform: scale(0.5); opacity: 0; }}
+    to   {{ transform: scale(1);   opacity: 1; }}
+  }}
+
+  .cake {{
+    font-size: 72px;
+    animation: bounce 1s ease-in-out infinite alternate;
+    display: block;
+    margin-bottom: 10px;
+  }}
+
+  @keyframes bounce {{
+    from {{ transform: translateY(0) rotate(-5deg); }}
+    to   {{ transform: translateY(-12px) rotate(5deg); }}
+  }}
+
+  .title {{
+    font-family: 'Pacifico', cursive;
+    font-size: 52px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #cc5de8);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+    margin: 0;
+    line-height: 1.2;
+  }}
+
+  @keyframes shimmer {{
+    0%   {{ background-position: 0% }}
+    100% {{ background-position: 300% }}
+  }}
+
+  .age {{
+    font-family: 'Pacifico', cursive;
+    font-size: 90px;
+    color: #ffd93d;
+    text-shadow: 0 0 20px rgba(255,217,61,0.6), 0 0 40px rgba(255,217,61,0.3);
+    margin: 5px 0;
+    animation: pulse 1.5s ease-in-out infinite;
+  }}
+
+  @keyframes pulse {{
+    0%,100% {{ text-shadow: 0 0 20px rgba(255,217,61,0.6), 0 0 40px rgba(255,217,61,0.3); }}
+    50%      {{ text-shadow: 0 0 40px rgba(255,217,61,1),   0 0 80px rgba(255,217,61,0.6); }}
+  }}
+
+  .subtitle {{
+    color: rgba(255,255,255,0.75);
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }}
+
+  .stars {{
+    margin-top: 18px;
+    font-size: 26px;
+    animation: starSpin 2s linear infinite;
+    display: inline-block;
+  }}
+
+  @keyframes starSpin {{
+    0%   {{ transform: rotate(0deg) scale(1); }}
+    50%  {{ transform: rotate(180deg) scale(1.2); }}
+    100% {{ transform: rotate(360deg) scale(1); }}
+  }}
+</style>
+</head>
+<body>
+  <div class="fireworks-container">
+    {gen_fireworks(80)}
+  </div>
+
+  <div class="card">
+    <span class="cake">🎂</span>
+    <p class="title">Happy Birthday!</p>
+    <div class="age">22</div>
+    <p class="subtitle">🎉 Tuổi 22 thật tuyệt vời 🎉</p>
+    <span class="stars">✨🌟✨</span>
+  </div>
+</body>
+</html>
+"""
+
+display(HTML(html_code))
